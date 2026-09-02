@@ -34,6 +34,8 @@ a corresponding file/route was found.
   via `curl`.
 - Confirmed (via `grep_search`, no matches) that neither `uis/website` nor `uis/backoffice` calls any
   backend — both are fully static, so no service was added under `./services` for this milestone.
+- `uis/website/README.md` and `uis/backoffice/README.md` added (objective, stack, structure, run/verify
+  commands), closing the "each new app gets a subfolder + README" gap for these two apps.
 
 ## Not verified / not started
 
@@ -43,9 +45,9 @@ a corresponding file/route was found.
   unset; `apiRequest()` will throw at runtime until it's configured. The app has not been verified to run
   against a live API.
 - **No automated tests** were found anywhere under `uis/talent-pipeline-tracker`.
-- **No README** exists inside `uis/talent-pipeline-tracker`, `uis/website`, or `uis/backoffice`
-  documenting setup/run steps, despite the root `README.md` convention of "each new app... gets a
-  subfolder + README."
+- **No README** exists inside `uis/talent-pipeline-tracker` documenting setup/run steps, despite the root
+  `README.md` convention of "each new app... gets a subfolder + README." (`uis/website` and
+  `uis/backoffice` now have one each.)
 - **`@repo/shared-types` (`packages/shared`) is not consumed** by any of the three UIs — each defines its
   own local `types/`/constants, so the shared-types package currently has no effect.
 - **No `docker-compose.yml` or `infra/` wiring** exists at the repo root.
