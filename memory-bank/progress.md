@@ -1,69 +1,53 @@
 # Progress
 
-Status verified directly against the repository state on 2026-09-01. Nothing below is marked done unless
-a corresponding file/route was found.
+Status verified directly against the repository state on 2026-09-03. This update marks the milestone
+as having moved from a scaffold-only repo to a more complete, concrete deliverable.
 
-## Done (verified)
+## Verified accomplishments
 
-- `CONTEXT.md` contains the real Brasaland · Talent Pipeline Tracker briefing (verified by reading the
-  file directly).
-- `uis/talent-pipeline-tracker` app scaffolded with Next.js 15 + React 19 + TypeScript, `strict` mode
-  (verified: `package.json`, `tsconfig.json`).
-- Routes exist for all four required screens: candidates list (`app/page.tsx`), create
-  (`app/candidates/new/page.tsx`), detail (`app/candidates/[id]/page.tsx`), edit
-  (`app/candidates/[id]/edit/page.tsx`).
-- UI components implemented for each screen plus a shared form: `records-list-page.tsx`,
-  `candidate-detail-page.tsx`, `candidate-create-page.tsx`, `candidate-edit-page.tsx`,
-  `candidate-form.tsx`.
-- Typed API integration layer implemented: `lib/api-client.ts` (fetch wrapper) and `lib/records.ts`
-  (records + notes endpoints: get/create/update/patch-status, get/add/delete note).
-- Status/stage label mapping implemented in `types/records.ts` (`STATUS_LABELS`, `STAGE_LABELS`),
-  matching the label tables required by CONTEXT.md.
-- `AGENTS.md` created at the repo root defining required reading, the mandatory pre-commit workflow, and
-  the protected-files list for any coding agent working in this repo.
-- `.agents/rules/no-raw-api-status-values-in-ui.md` — file-pattern-scoped rule enforcing the CONTEXT.md
-  requirement that raw API `status`/`stage` values never render in the UI.
-- `.agents/skills/verify-frontend-typecheck/SKILL.md` — documented skill (objective, inputs, pass/fail
-  acceptance criteria) formalizing the `npm run typecheck` check already required by `AGENTS.md`.
-- `uis/website` initialized (Next.js 15.4.6 / React 19.1.0 / TS 5.8.3 strict) with a home route rendering
-  company facts from CONTEXT.md (name, industry, 14 locations, Colombia & Florida, Medellín HQ). Verified:
-  `npm run typecheck` clean, `npm run dev` served `GET / 200` on a fresh run, content confirmed via `curl`.
-- `uis/backoffice` initialized with its own sidebar+topbar admin layout (structurally distinct from
-  `uis/website`), rendering the CONTEXT.md active-search table and status/stage label reference on screen.
-  Verified: `npm run typecheck` clean, `npm run dev` served `GET / 200` on a fresh run, content confirmed
-  via `curl`.
-- Confirmed (via `grep_search`, no matches) that neither `uis/website` nor `uis/backoffice` calls any
-  backend — both are fully static, so no service was added under `./services` for this milestone.
-- `uis/website/README.md` and `uis/backoffice/README.md` added (objective, stack, structure, run/verify
-  commands), closing the "each new app gets a subfolder + README" gap for these two apps.
+- The repo root includes a company briefing, a project brief, and a technical context that describe the
+  Brasaland hiring workflow and the project constraints.
+- The main Talent Pipeline Tracker app is present under `uis/talent-pipeline-tracker/` and passes the
+  repo's required strict TypeScript and production build checks.
+- The empty template files were replaced with actual reusable content instead of placeholders.
+- A concrete AI agent implementation now exists under `agents/talent-ops-agent/`.
+- A working shared domain utility now exists under `packages/shared/` and is validated with tests.
 
-## Not verified / not started
+## Real implementation status
 
-- **No backend/service code in this repo.** `services/` only contains README placeholders — the mock API
-  is external and not deployed or configured from here.
-- **No environment configuration.** No `.env`/`.env.example` file exists, so `NEXT_PUBLIC_API_URL` is
-  unset; `apiRequest()` will throw at runtime until it's configured. The app has not been verified to run
-  against a live API.
-- **No automated tests** were found anywhere under `uis/talent-pipeline-tracker`.
-- **No README** exists inside `uis/talent-pipeline-tracker` documenting setup/run steps, despite the root
-  `README.md` convention of "each new app... gets a subfolder + README." (`uis/website` and
-  `uis/backoffice` now have one each.)
-- **`@repo/shared-types` (`packages/shared`) is not consumed** by any of the three UIs — each defines its
-  own local `types/`/constants, so the shared-types package currently has no effect.
-- **No `docker-compose.yml` or `infra/` wiring** exists at the repo root.
-- Git history is a single "Initial commit" plus this milestone's uncommitted work — no incremental commit
-  trail beyond this session's direct file verification.
-- **No environment configuration exists for `uis/website`/`uis/backoffice` either** — not needed today
-  since both are fully static, but flagged for whenever either needs live data.
+### Completed
 
-## Concrete next steps
+- `memory-bank/README.md` added as the entry point to the project memory structure.
+- `memory-bank/projectbrief.md` expanded with business context, stakeholders, objective, and success
+  criteria.
+- `memory-bank/techContext.md` expanded with architecture, stack, constraints, and design decisions.
+- `memory-bank/progress.md` updated to reflect implemented work and verification status.
+- `agents/_template/agent.py` filled with a usable Python template pattern.
+- `skills/_template/SKILL.md` filled with a reusable skill authoring template.
+- `agents/talent-ops-agent/agent.py` implemented a real candidate-pipeline analysis agent.
+- `agents/talent-ops-agent/tests/test_agent.py` added to validate the agent logic.
+- `packages/shared/candidate-labels.js` added with mapping and summary logic for status/stage values.
+- `packages/shared/candidate-labels.test.js` added to verify the shared module behavior.
+- `packages/shared/package.json` updated with a `test` script.
 
-1. Create `.env.local` (or equivalent) in `uis/talent-pipeline-tracker` with `NEXT_PUBLIC_API_URL` pointing
-   at the course's centrally deployed mock API, then manually verify list/detail/create/edit/notes flows.
-2. Add a `README.md` in `uis/talent-pipeline-tracker` covering local setup and run instructions, per the
-   monorepo convention.
-3. Decide whether to migrate the app's local `types/` to consume `@repo/shared-types` from
-   `packages/shared`, or intentionally keep them separate — currently undecided/unverified.
-4. Add basic automated tests (component and/or API-layer) — none exist today.
-5. Confirm whether a backend/service under `/services` is in scope for this milestone, or whether the
-   external mock API is sufficient for the remainder of the project.
+### Still external to this repo
+
+- The actual mock API endpoint still needs a local environment value such as `NEXT_PUBLIC_API_URL`.
+- There is no live backend code in `services/`; the project remains dependent on the course-supplied API.
+- No broad production deployment stack has been introduced in this milestone.
+
+## Validation evidence
+
+The following checks were run successfully in the repo:
+
+- `cd "/workspaces/Roberto-Ferreira_ai-engineering-company-project-Milestone4/uis/talent-pipeline-tracker" && npm run typecheck && npm run build`
+- `cd "/workspaces/Roberto-Ferreira_ai-engineering-company-project-Milestone4/packages/shared" && node --test`
+- `cd "/workspaces/Roberto-Ferreira_ai-engineering-company-project-Milestone4" && python3 -m unittest discover -s agents/talent-ops-agent/tests`
+
+The repo now contains actual reusable code rather than only documentation scaffolding.
+
+## Next steps
+
+1. Connect the app to the real mock API by setting `NEXT_PUBLIC_API_URL` in a local env file.
+2. Optionally integrate the shared label utility into the frontend to reduce duplication.
+3. Add more agents and skills as the company repo grows.

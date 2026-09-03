@@ -3,9 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "description": "Shared types for AI Engineering transversal projects",
-  "main": "index.ts",
+  "main": "candidate-labels.js",
   "types": "index.ts",
-  "scripts": {},
+  "scripts": {
+    "test": "node --test"
+  },
   "keywords": [
     "types",
     "shared"

@@ -1,66 +1,90 @@
 # Tech Context
 
-Every fact below is verified against a file in the repo (path noted) or against [CONTEXT.md](../CONTEXT.md).
-Nothing here is assumed.
+This file captures the verified project architecture and implementation choices for the Brasaland
+Talent Pipeline Tracker and related company repo structures.
 
-## Repository layout in use
+## Repository layout
 
-- `uis/talent-pipeline-tracker/` — the only implemented application in the repo (the "Talent Pipeline
-  Tracker" frontend). Verified via `list_dir` on `uis/`.
-- `services/` contains only `README.md`/`README.es.md` — **no backend service is implemented in this
-  repo**. Per CONTEXT.md, "the mock API is centrally deployed and shared across all company contexts in
-  the course" — the backend is an external, pre-built dependency, not code owned here.
-- `packages/shared/package.json` declares `@repo/shared-types` (types package), but no root workspace
-  runner is configured (confirmed in root `README.md`: "no workspace runner is configured at root"), and
-  `uis/talent-pipeline-tracker` does not import from `@repo/shared-types` — it defines its own local
-  `types/` folder instead.
-- No `docker-compose.yml`, `.env`, or `.env.example` exists anywhere in the repo (verified with
-  `file_search`). No `infra/` config beyond the placeholder README.
+- `uis/` contains the user-facing product experiences: `website/`, `backoffice/`, and the main
+  `talent-pipeline-tracker/` app.
+- `agents/` is where AI assistants live. The repo includes a general template and a concrete agent for
+  candidate pipeline support.
+- `skills/` holds reusable capabilities such as research and analysis; template and real examples live
+  here.
+- `packages/shared/` is the repository's shared library boundary for reusable domain modules and types.
+- `services/` remains a documentation-only placeholder because the backend API is external to this repo.
 
-## Frontend stack — `uis/talent-pipeline-tracker/package.json`
+## Verified technical stack
 
-- **Framework:** Next.js `15.4.6` (App Router — routes live under `app/`).
-- **UI library:** React `19.1.0` / `react-dom` `19.1.0`.
-- **Language:** TypeScript `5.8.3`, `strict: true`, `noEmit: true` (type-checking only, via `tsc --noEmit`
-  in the `typecheck` script).
-- **Module/path setup** (`tsconfig.json`): `moduleResolution: "bundler"`, path alias `@/*` → project root.
-- **Scripts:** `dev` (`next dev`), `build` (`next build`), `start` (`next start`), `typecheck`.
-- `next.config.ts` has no custom configuration (empty `NextConfig` object).
+### Frontend stack
 
-## Application architecture (as implemented)
+- Next.js 15.4.6 with App Router
+- React 19 and React DOM 19
+- TypeScript 5.8.3 in strict mode
+- `npm run typecheck` via `tsc --noEmit`
+- `npm run build` via Next.js production build
 
-- **Routing** (`app/`): `/` (candidates list), `/candidates/new` (create), `/candidates/[id]` (detail),
-  `/candidates/[id]/edit` (edit). Verified via `list_dir`.
-- **Presentation components** (`components/`): `records-list-page.tsx`, `candidate-detail-page.tsx`,
-  `candidate-create-page.tsx`, `candidate-edit-page.tsx`, and a shared `candidate-form.tsx` reused by
-  create/edit.
-- **API access layer:**
-  - `lib/api-client.ts` — a generic `apiRequest<T>()` fetch wrapper. It reads the API base URL from
-    `process.env.NEXT_PUBLIC_API_URL` and **throws if that env var is not set** — there is currently no
-    `.env` file defining it, so the app cannot reach a real API out of the box.
-  - `lib/records.ts` — typed functions over `apiRequest`: `getRecords`, `getRecordById`, `createRecord`,
-    `updateRecord` (PUT), `patchRecordStatus` (PATCH), `getNotes`, `addNote`, `deleteNote`. Endpoints used:
-    `records`, `records/:id`, `records/:id/notes`, `records/:id/notes/:noteId`.
-- **Domain types** (`types/records.ts`, `types/api.ts`): `RecordBase`/`RecordListItem`/`RecordDetail`,
-  `RecordNote`, plus `RECORD_STATUSES`/`RECORD_STAGES` and `STATUS_LABELS`/`STAGE_LABELS` lookup maps that
-  translate raw API values into the human-readable labels required by CONTEXT.md.
+### AI and reusable code stack
 
-## API contract (per CONTEXT.md, "no adaptation required")
+- Python 3 standard library for simple agent logic and tests
+- Node.js built-in test runner for validating shared JS modules
+- Domain-facing shared helpers are kept in `packages/shared/` so they can be reused by future UIs or agents
 
-- `status` values: `received`, `in_progress`, `selected`, `discarded`.
-- `stage` values: `pending`, `review`, `personal_interview`, `technical_interview`, `offer_presented`.
-- The UI must always render the mapped label, never the raw value.
+## Architecture notes
 
-## Constraints
+### Candidate-tracker app
 
-- Do not change the shape of the mock API — it is centrally deployed and shared across all company
-  contexts in the course (CONTEXT.md).
-- Strict TypeScript compilation must pass (`strict: true` in `tsconfig.json`).
-- Notes must only be visible in the candidate detail view (CONTEXT.md acceptance criteria).
+The main app under `uis/talent-pipeline-tracker/` follows a simple app-router structure:
 
-## Unverified / flagged
+- `/` — candidate list view
+- `/candidates/new` — create candidate form
+- `/candidates/[id]` — detail and notes view
+- `/candidates/[id]/edit` — edit page
 
-- There is no documented deployment target, hosting setup, or CI pipeline for this app (`.github/`
-  contents were not inspected as part of this task — flag for follow-up, not assumed here).
-- The exact value/host for `NEXT_PUBLIC_API_URL` is not present anywhere in the repo and must be sourced
-  from course material, not invented.
+Shared patterns include:
+
+- typed API access in `lib/api-client.ts` and `lib/records.ts`
+- human-readable status/stage mapping in domain type files
+- reusable form logic in `components/candidate-form.tsx`
+
+### Agent design pattern
+
+Agents in this repo should do one of two things:
+
+1. make the hiring workflow more actionable for recruiters,
+2. encapsulate a repeatable decision-making pattern that other tools can reuse.
+
+The concrete agent in `agents/talent-ops-agent/` follows this pattern by summarizing pipeline health,
+flagging candidates needing attention, and generating next-step recommendations.
+
+### Shared module design pattern
+
+The shared package at `packages/shared/` is a place for low-level, reusable logic that is not app-specific.
+This includes:
+
+- candidate status/stage label mapping,
+- domain-level helper functions,
+- future schema definitions or metadata utilities.
+
+## API contract constraints
+
+The API contract must not be changed. The following values are treated as canonical:
+
+- status: `received`, `in_progress`, `selected`, `discarded`
+- stage: `pending`, `review`, `personal_interview`, `technical_interview`, `offer_presented`
+
+Human-friendly labels must be rendered in the UI instead of raw API values.
+
+## Constraints and risks
+
+- No backend service is implemented in this repo; the generated app depends on the centrally deployed mock API.
+- `NEXT_PUBLIC_API_URL` must be configured in the local environment for runtime API usage.
+- The project remains intentionally lightweight and documentation-first until the real service contract is available.
+- Shared code must remain compact, explicit, and easy to test.
+
+## Decision log
+
+- Use a repo-level memory bank as the source of truth for product and architecture context.
+- Keep the app UI decoupled from raw API strings by mapping them to labels in one layer.
+- Keep agent and skill implementations small but reusable; avoid empty templates.
+- Prefer direct, documented shared modules over hidden logic scattered across apps.
