@@ -49,7 +49,7 @@ def to_user_response(user: User) -> UserResponse:
 
 
 def ensure_self_or_admin(current_user: User, target_user_id: str) -> None:
-    if current_user.id != target_user_id and current_user.role != UserRole.ADMIN:
+    if current_user.id != target_user_id and current_user.role != UserRole.ADMIN.value:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized for this user.")
 
 

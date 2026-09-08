@@ -16,3 +16,11 @@ def get_users_table():
 
 def get_profiles_table():
     return get_database().table("profiles")
+
+
+def get_records_table():
+    return get_database().table("records")
+
+
+def get_notes_table():
+    return get_database().table("notes")
