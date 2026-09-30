@@ -1,0 +1,121 @@
+:root {
+  --brasaland-charcoal: #262019;
+  --brasaland-ember: #c1440e;
+  --brasaland-flame: #e8590c;
+  --brasaland-cream: #fbf4ec;
+}
+
+html {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--brasaland-cream);
+  color: var(--brasaland-charcoal);
+}
+
+main {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.site-header {
+  background: var(--brasaland-charcoal);
+  color: var(--brasaland-cream);
+}
+
+.site-header-inner {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-mark {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.nav-list {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list a {
+  color: var(--brasaland-cream);
+  text-decoration: none;
+}
+
+.hero {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid rgba(38, 32, 25, 0.1);
+}
+
+.hero-eyebrow {
+  color: var(--brasaland-ember);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin: 0.25rem 0;
+  color: var(--brasaland-flame);
+}
+
+.hero-subtitle {
+  max-width: 40rem;
+  font-size: 1.1rem;
+}
+
+.company-highlights,
+.locations-section {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(38, 32, 25, 0.1);
+}
+
+.stat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.stat-card {
+  flex: 1 1 12rem;
+  background: white;
+  border: 1px solid rgba(38, 32, 25, 0.1);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-card-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--brasaland-ember);
+}
+
+.stat-card-label {
+  font-size: 0.9rem;
+}
+
+.site-footer {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(38, 32, 25, 0.7);
+}
