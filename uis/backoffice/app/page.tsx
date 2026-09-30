@@ -1,12 +1,5 @@
-import { ActiveSearchCard } from "@/components/active-search-card";
-import { DashboardShell } from "@/components/dashboard-shell";
-import { StatusStageReference } from "@/components/status-stage-reference";
+import { IncidentAnalysisPage } from "../components/incident-analysis-page";
 
-export default function HomePage() {
-  return (
-    <DashboardShell title="Recruiting overview">
-      <ActiveSearchCard />
-      <StatusStageReference />
-    </DashboardShell>
-  );
+export default function Page() {
+  return <IncidentAnalysisPage />;
 }

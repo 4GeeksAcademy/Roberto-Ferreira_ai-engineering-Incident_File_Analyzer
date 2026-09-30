@@ -1,8 +1,4 @@
-node_modules
-.next
-out
-dist
-.env.local
-npm-debug.log*
-tsconfig.tsbuildinfo
+node_modules/
+.next/
+out/
 *.tsbuildinfo

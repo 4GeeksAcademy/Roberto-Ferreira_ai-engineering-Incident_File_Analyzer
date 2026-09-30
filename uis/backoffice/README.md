@@ -1,19 +1,32 @@
-# backoffice
+# Incident Analyzer backoffice
 
-Brasaland Digital's internal operations dashboard.
+```bash
+npm install
+npm run dev
+```
 
-- **Objective:** give internal teams a dashboard shell — distinct from the public `website` layout —
-  surfacing company-relevant business data straight from [`CONTEXT.md`](../../CONTEXT.md): the active
-  hiring search and the candidate status/stage label reference.
-- **Stack:** Next.js 15.4.6 (App Router), React 19.1.0, TypeScript 5.8.3 (strict). Same versions as the
-  other apps in `uis/`.
-- **Structure:** `app/` (routes: `/`), `components/` (`SidebarNav`, `TopBar`, `DashboardShell`,
-  `ActiveSearchCard`, `StatusStageReference`).
-- **Data note:** all content is static, sourced directly from CONTEXT.md — there is no backend/service
-  wired up yet (see [`../../services/README.md`](../../services/README.md)).
-- **Run locally:**
-  ```bash
-  npm install
-  npm run dev
-  ```
-- **Verify:** `npm run typecheck` (TypeScript strict, no build step configured yet).
+Start the API first from the repository root:
+
+```bash
+pip install -r services/api/requirements.txt
+uvicorn services.api.main:app --reload
+```
+
+Then open `http://localhost:3000`, choose or drag
+`scripts/incidents-brasaland.csv` into the upload area, and confirm the loaded
+summary. The page uploads a CSV to `POST /api/incidents/analyze`, displays the
+JSON summary, and downloads the latest exported results from
+`GET /api/incidents/results/export`.
+
+The default browser requests are same-origin and are proxied by Next.js to
+the API on port 8000. This is important in Codespaces or other remote
+workspaces, where the browser's `localhost` is not the API container. Set
+`NEXT_PUBLIC_API_URL` only when the API is intentionally hosted at a separate
+browser-reachable origin.
+
+The frontend has no dedicated test runner in `package.json`; verify it with:
+
+```bash
+npm run typecheck
+npm run build
+```

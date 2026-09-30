@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Frontend build/dependency artifacts
+node_modules/
+.next/
+out/
+*.tsbuildinfo
