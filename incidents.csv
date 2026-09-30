@@ -1,0 +1,17 @@
+CSV Structure
+Filename: incidents.csv
+Encoding: UTF-8
+Separator: comma (,)
+Header row: yes (row 1)
+
+Field	Type	Required	Allowed values / format
+incident_id	string	✅	Unique ID, format BRS-XXXXXX (e.g. BRS-000001)
+date	string	✅	YYYY-MM-DD
+location_id	string	✅	One of: COL-01 to COL-10, FLA-01 to FLA-04
+category	string	✅	See categories below
+description	string	✅	Free text, min 5 characters
+status	string	✅	OPEN, CLOSED, DISCARDED
+customer_id	string	❌	Optional. Format CLI-XXXXXX. Can be empty
+satisfaction_score	integer	❌*	Integer 1–5. Required if status = CLOSED
+reporter_id	string	✅	Manager ID, format MGR-XX
+*satisfaction_score is optional in the CSV structure, but a CLOSED record without it is considered incomplete.
