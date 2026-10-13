@@ -51,3 +51,18 @@ The repo now contains actual reusable code rather than only documentation scaffo
 1. Connect the app to the real mock API by setting `NEXT_PUBLIC_API_URL` in a local env file.
 2. Optionally integrate the shared label utility into the frontend to reduce duplication.
 3. Add more agents and skills as the company repo grows.
+
+## Incident Analyzer rubric submission audit (2026-10-13)
+
+This is a separate deliverable evaluated against `.project_requirements/rubric.md`;
+the root context and the tracker milestone above remain unchanged.
+
+- The official CSV produces 100 total, 96 valid, 4 invalid records, and a 3.46
+  average satisfaction score. Analyzer tests (8) and API tests (5) pass.
+- Backoffice TypeScript typecheck and production build pass. A live Playwright
+  upload of the official file displayed the expected metrics; the CLI and UI
+  evidence images are stored under `docs/Screenshots/`.
+- CLI CSV export was exercised and produced populated `metric,value` rows.
+- The backoffice Next.js pin is 15.5.27. `npm audit` still reports 4
+  advisories (1 critical, 3 high); a major-version upgrade remains a production
+  security task, not a verified rubric requirement.
