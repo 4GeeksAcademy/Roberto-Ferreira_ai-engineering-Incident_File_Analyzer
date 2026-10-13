@@ -36,3 +36,10 @@ return `422`, and exporting before a successful analysis returns `404`.
 The API imports `scripts/analyzer_core.py`; validation and metrics must not be
 duplicated in the endpoint layer. CORS permits the local backoffice origins
 `http://localhost:3000` and `http://127.0.0.1:3000`.
+
+Run the API contract tests with their test-only client dependency:
+
+```bash
+pip install -r services/api/requirements-test.txt
+PYTHONPATH=. python services/api/test_main.py
+```

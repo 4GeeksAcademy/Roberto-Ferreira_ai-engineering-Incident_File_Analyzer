@@ -14,6 +14,7 @@ returned summary, communicates invalid records, and downloads the exported CSV.
 - Added FastAPI analysis and export endpoints under `services/api/`.
 - Added API endpoint tests for success, parity, export, errors, and CORS.
 - Added the backoffice upload, results, invalid-record notice, and download UI.
+- Updated the backoffice Next.js pin to `15.5.27` and configured TypeScript path aliases.
 - Added run instructions and the Phase 4 audit report.
 
 ## Evidence
@@ -28,18 +29,15 @@ Official 100-record dataset results:
 
 Tests and checks:
 
-- Python analyzer tests: `6 passed`
+- Python analyzer tests: `8 passed`
 - API endpoint tests: `5 passed`
 - Frontend typecheck: passed
 - Frontend production build: passed
 
 ### Required submission screenshots
 
-- `docs/Screenshots/5CCE738F-21BA-4367-9D56-802177F3E1DA.jpeg` — CLI console output using `scripts/incidents-brasaland.csv`.
-- `docs/Screenshots/ABCE32A0-D14E-49A9-8BCD-C227295EC21E.jpeg` — backoffice with the loaded analysis.
-
-These two screenshots are still required before submitting the pull request;
-they cannot be generated or attached by the repository build itself.
+- `docs/Screenshots/71332CD3-EA8B-41D4-BCC6-7F8E71886A64.jpeg` — CLI console output from `python scripts/analyze.py scripts/incidents-brasaland.csv`, showing the 100-record summary.
+- `docs/Screenshots/ABCE32A0-D14E-49A9-8BCD-C227295EC21E.jpeg` — backoffice with the loaded 100-record analysis.
 
 ## Run locally
 
@@ -55,8 +53,11 @@ In a second terminal:
 ```bash
 cd uis/backoffice
 npm install
-NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
+npm run dev
 ```
+
+Leave `NEXT_PUBLIC_API_URL` unset for local development; the Next.js app proxies
+`/api/incidents/*` to the API on port 8000, including in forwarded workspaces.
 
 Open `http://localhost:3000` and upload `scripts/incidents-brasaland.csv`.
 
@@ -72,6 +73,10 @@ Analysis and validation logic is implemented once in
 `scripts/analyzer_core.py`; the script and API import it directly, while the
 frontend renders API response values without recomputing business metrics.
 
-Known unverified item: a live browser smoke test was not executed in the audit
-environment. The frontend typecheck and production build succeeded, and the
-API contract tests passed.
+The live browser smoke test uploaded the official CSV and verified the displayed
+100 total, 96 valid, 4 invalid, and 3.46 average. Frontend typecheck, production
+build, analyzer tests, and API contract tests all passed.
+
+Security note: `npm audit` still reports 4 advisories (1 critical, 3 high) in
+Next.js and transitive dependencies. A major framework upgrade is not included
+in this grading submission; resolve these advisories before production use.
